@@ -1,0 +1,58 @@
+<html>
+
+<head>
+    <title>WebSocket Tutorial</title>
+    <style>
+        #container {
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            font-size: 400%;
+        }
+
+        p {
+            color: green;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <p id="text"></p>
+        <p id="timestamp"></p>
+    </div>
+    <script>
+        let message = document.getElementById("text");
+        let time = document.getElementById("timestamp");
+        const socket = new WebSocket("ws://localhost:1880/messages");
+        socket.addEventListener("message", handleMessage);
+
+
+        function handleMessage(event) {
+            let input = event.data.split("_");
+            let direction = input[0];
+            let millis = input[1];
+            message.innerHTML = direction;
+            time.innerHTML = millis;
+
+            if(direction == "Up!") {
+                document.body.style.backgroundColor = "red";
+            } else if (direction == "Right!") {
+                document.body.style.backgroundColor = "orange";
+            } else if (direction == "Left!") {
+                document.body.style.backgroundColor = "yellow";
+            } else if (direction == "Down!") {
+                document.body.style.backgroundColor = "blue";
+            }
+
+            document.body.style.fontSize = `${Number(millis) % 100}`;
+
+            console.log(event.data);
+        }
+    </script>
+</body>
+
+</html>
