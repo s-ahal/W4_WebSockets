@@ -1,0 +1,88 @@
+[
+    {
+        "id": "cc35feb53ba37146",
+        "type": "tab",
+        "label": "Flow 2",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "30ac0422eb0075eb",
+        "type": "tcp in",
+        "z": "cc35feb53ba37146",
+        "name": "",
+        "server": "server",
+        "host": "",
+        "port": "7194",
+        "datamode": "stream",
+        "datatype": "utf8",
+        "newline": "\\r\\n",
+        "topic": "",
+        "trim": false,
+        "base64": false,
+        "tls": "",
+        "x": 140,
+        "y": 160,
+        "wires": [
+            [
+                "d244075560fca796"
+            ]
+        ]
+    },
+    {
+        "id": "2f309eb02e6a21fd",
+        "type": "debug",
+        "z": "cc35feb53ba37146",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 340,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "cf93517967116593",
+        "type": "websocket out",
+        "z": "cc35feb53ba37146",
+        "name": "",
+        "server": "82819acde35a4799",
+        "client": "",
+        "x": 540,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "d244075560fca796",
+        "type": "function",
+        "z": "cc35feb53ba37146",
+        "name": "function 2",
+        "func": "var input = msg.payload.split(\"_\");\nvar message = input[0];\nvar millis = input[1];\n\nif(message == \"Collision back\"){\n    msg.payload = \"Down!_\" + millis;\n} else if (message == \"Collision front\") {\n    msg.payload = \"Up!_\" + millis;\n} else if (message == \"Collision right\") {\n    msg.payload = \"Right!_\" + millis;\n} else if (message == \"Collision left\") {\n    msg.payload = \"Left!_\" + millis;\n}\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 220,
+        "y": 260,
+        "wires": [
+            [
+                "cf93517967116593",
+                "2f309eb02e6a21fd"
+            ]
+        ]
+    },
+    {
+        "id": "82819acde35a4799",
+        "type": "websocket-listener",
+        "path": "/messages",
+        "wholemsg": "false"
+    }
+]
